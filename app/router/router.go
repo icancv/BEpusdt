@@ -32,7 +32,8 @@ func Handler() *gin.Engine {
 	})
 
 	engine.Use(sessions.Sessions("session", session))
-	engine.Use(gin.LoggerWithWriter(log.GetWriter()), gin.Recovery())
+	// api.php 查单把商户密钥放在 URL query 里，访问日志不能记录 query
+	engine.Use(gin.LoggerWithConfig(gin.LoggerConfig{Output: log.GetWriter(), SkipQueryString: true}), gin.Recovery())
 	engine.Use(sessionAuth(), copyright())
 	engine.NoRoute(noRoute())
 	engine.GET("/", func(ctx *gin.Context) {

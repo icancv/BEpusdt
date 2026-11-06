@@ -1,0 +1,26 @@
+services:
+  bepusdt:
+    image: bepusdt:${IMAGE_TAG:-local}
+    container_name: bepusdt
+    build:
+      context: ..
+      dockerfile: dockerfile
+      args:
+        VERSION: ${VERSION:-unknown}
+    restart: unless-stopped
+    ports:
+      - "${BIND_HOST:-127.0.0.1}:${BEPUSDT_PORT:-6188}:8080"
+    environment:
+      - TZ=Asia/Shanghai
+      - LISTEN=:8080
+      - LOG=/var/log/bepusdt/
+      - POSTGRESQL_DSN=${POSTGRESQL_DSN:?POSTGRESQL_DSN is required}
+    volumes:
+      - ./data/log:/var/log/bepusdt
+    networks:
+      - external
+
+networks:
+  external:
+    external: true
+    name: ${EXTERNAL_NETWORK:?EXTERNAL_NETWORK is required}

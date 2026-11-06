@@ -1,0 +1,11 @@
+.git
+.idea
+.DS_Store
+.env
+*.log
+tmp
+dist
+web/node_modules
+web/dist
+deploy/data
+deploy/.env
